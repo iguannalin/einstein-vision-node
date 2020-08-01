@@ -25,7 +25,7 @@ class App extends Component {
                             <option value="pegasus">Pegasus</option>
                         </select>
                     </span>
-                    <span className="prediction"  id="statement"></span>
+                    <span className="prediction" id="statement"></span>
                 </div>
                 <div className="footer">
                 </div>
