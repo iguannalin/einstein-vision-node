@@ -13,21 +13,19 @@ class App extends Component {
 
     render() {
         return (
-            <div>
+            <div className="component-card">
                 <div className="title">
                     <h1 className="intro">
                         Nike
                     </h1>
-                    <div>
-                        <p id="statement"></p>
-                    </div>
-                </div>
-                <div className="button">
-                    <select name="product-choice" onChange={this.handleButtonClick}>
-                        <option value="default">Choose one</option>
-                        <option value="react">React FlyKnit</option>
-                        <option value="pegasus">Pegasus</option>
-                    </select>
+                    <span className="dropdown">
+                        <select name="product-choice" onChange={this.handleButtonClick}>
+                            <option value="default">Choose one</option>
+                            <option value="react">React FlyKnit</option>
+                            <option value="pegasus">Pegasus</option>
+                        </select>
+                    </span>
+                    <span className="prediction"  id="statement"></span>
                 </div>
                 <div className="footer">
                 </div>
@@ -44,7 +42,7 @@ class App extends Component {
                         count: this.state.labels[key]
                     });
                 }
-                document.getElementById('statement').innerText = 'Your shoe seems to be seen a lot at the ' + this.state.scene + '.';
+                document.getElementById('statement').innerHTML = '...is often seen at the ' + this.state.scene + '.';
             }
         }
     };
@@ -113,9 +111,11 @@ class App extends Component {
             });
             req.end((err, res) => {
                 if (err) {
+                    console.log('file-upload error', err);
                     this.setState({uploadError: err.message});
                     return err;
                 }
+                console.log('file-upload response', res);
                 this.filterProbabilities(res);
                 return res;
             });
