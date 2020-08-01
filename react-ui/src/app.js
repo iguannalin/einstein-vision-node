@@ -39,7 +39,7 @@ class App extends Component {
                     </div>
                 </div>
                 <div className="button">
-                    <button onClick={this.handleClick}>Click me</button>
+                    <button onClick={this.handleButtonClick}>Click me</button>
                 </div>
                 <div className={classNames(
                     "app",
@@ -128,7 +128,9 @@ class App extends Component {
         // Import all images in image folder by Gabriel Esu
         function importAll(r) {
             let images = {};
-            r.keys().map((item, index) => { images[item.replace('./', '')] = r(item); });
+            r.keys().map((item, index) => {
+                images[item.replace('./', '')] = r(item);
+            });
             return images;
         }
 
@@ -137,7 +139,22 @@ class App extends Component {
 
         const images = importAll(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg)$/));
         console.log('IMAGES', images);
+
+
+        for (let key in images) {
+            const url = images[key];
+            console.log(key, url);
+            fetch(url).then(data => data.blob()).then(res => {
+                console.log('meow', res);
+                let file = new File([res], key);
+                this.handleClick([file]);
+            });
+        }
     }
+
+    handleButtonClick = () => {
+        this.getFiles();
+    };
 
     handleClick = (acceptedFiles) => {
         console.log('HANDLE CLICK ');
@@ -150,7 +167,8 @@ class App extends Component {
     };
 
     onDrop = (acceptedFiles, rejectedFiles) => {
-        acceptedFiles.map(file => Object.assign(file, {preview: URL.createObjectURL(file)}))
+        // acceptedFiles.map(file => Object.assign(file, {preview: URL.createObjectURL(file)}))
+        console.log('WHAT ACCEPTED ', acceptedFiles);
         if (acceptedFiles.length) {
             // this.setState({
             //     isProcessing: true,
