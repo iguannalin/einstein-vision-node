@@ -52,13 +52,10 @@ class App extends Component {
 
     getScene = () => {
         if (this.state.labels.length > 0) {
-            console.log('LABE  KEY', this.state.labels, typeof this.state.labels, this.state.labels.entries())
         }
         if (typeof this.state.labels === 'object') {
             for (let key in this.state.labels) {
-                console.log('KEY ', key, this.state.labels[key]);
                 if (this.state.labels[key] > this.state.count) {
-                    console.log('THIS KEY', this.state.labels[key], this.state.count);
                     this.setState({
                         scene: key,
                         count: this.state.labels[key]
@@ -89,9 +86,7 @@ class App extends Component {
 
         for (let key in images) {
             const url = images[key];
-            console.log(key, url);
             fetch(url).then(data => data.blob()).then(res => {
-                console.log('meow', res);
                 let file = new File([res], key);
                 this.handleClick([file]);
             });
@@ -106,18 +101,13 @@ class App extends Component {
     };
 
     handleClick = (acceptedFiles) => {
-        console.log('HANDLE CLICK ');
-        console.log('HANDLE CLICK ', acceptedFiles);
         acceptedFiles.forEach(async (file) => {
-            console.log('HANDLE CLICK ', file);
             const result = await this.onDrop([file]);
-            console.log('HANLDE RESULT ', result)
         });
     };
 
     onDrop = (acceptedFiles, rejectedFiles) => {
         // acceptedFiles.map(file => Object.assign(file, {preview: URL.createObjectURL(file)}))
-        console.log('WHAT ACCEPTED ', acceptedFiles);
         if (acceptedFiles.length) {
             // this.setState({
             //     isProcessing: true,
@@ -134,15 +124,12 @@ class App extends Component {
             req.end((err, res) => {
                 // this.setState({isProcessing: false});
                 if (err) {
-                    console.log('file-upload error', err);
                     this.setState({uploadError: err.message});
                     return err;
                 }
-                console.log('file-upload response', res);
                 let probabilities = JSON.parse(res.text).probabilities;
                 probabilities.filter(item => item.probability > 0.5);
                 probabilities.forEach(item => {
-                    console.log('ITEM', item);
                     if (item.probability > 0.5) {
                         const tempLabels = this.state.labels;
                         if (item.label in this.state.labels) {
@@ -156,7 +143,6 @@ class App extends Component {
                     }
                 });
                 this.getScene();
-                console.log('PROBS', probabilities, this.state.labels, 'scene', this.state.scene);
                 return res;
                 // this.setState({uploadResponse: JSON.parse(res.text)});
             });
