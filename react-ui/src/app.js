@@ -3,14 +3,24 @@ import superagent from 'superagent';
 import './app.css';
 
 class App extends Component {
-    state = {
-        labels: {},
-        highestFrequency: {
-            label: '',
-            probability: 0
-        },
-        product: 'pegasus'
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            labels: {},
+            highestFrequency: {
+                label: '',
+                probability: 0
+            },
+            product: ''
+        };
+        this.getScene = this.getScene.bind(this);
+        this.handleButtonClick = this.handleButtonClick.bind(this);
+        this.importAllImages = this.importAllImages.bind(this);
+        this.getFiles = this.getFiles.bind(this);
+        this.fetchProbabilities = this.fetchProbabilities.bind(this);
+        this.filterProbabilities = this.filterProbabilities.bind(this);
+        this.onDrop = this.onDrop.bind(this);
+    }
 
     render() {
         return (
@@ -34,7 +44,7 @@ class App extends Component {
         );
     }
 
-    getScene = () => {
+    getScene() {
         if (typeof this.state.labels === 'object') {
             for (let key in this.state.labels) {
                 if (this.state.labels[key] > this.state.highestFrequency.probability) {
@@ -48,7 +58,7 @@ class App extends Component {
         }
     };
 
-    handleButtonClick = async (e) => {
+    async handleButtonClick(e) {
         await this.setState({
             labels: {},
             highestFrequency: {
@@ -61,7 +71,7 @@ class App extends Component {
     };
 
     // Import all images in image folder by Gabriel Esu
-    importAllImages = (r) => {
+    importAllImages(r) {
         let images = {};
         r.keys().map((item) => {
             return images[item.replace('./', '')] = r(item);
@@ -69,7 +79,7 @@ class App extends Component {
         return images;
     };
 
-    getFiles = () => {
+    getFiles() {
         let images;
         if (this.state.product === 'pegasus') {
             images = this.importAllImages(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg)$/));
@@ -90,7 +100,7 @@ class App extends Component {
         }
     }
 
-    filterProbabilities = (res) => {
+    filterProbabilities(res) {
         let probabilities = JSON.parse(res.text).probabilities;
         let tempLabels = this.state.labels;
         let tempHighestFrequency = this.state.highestFrequency;
@@ -112,7 +122,7 @@ class App extends Component {
         this.getScene();
     };
 
-    onDrop = (acceptedFiles) => {
+    onDrop(acceptedFiles) {
         if (acceptedFiles.length) {
             let req = superagent.post('/file-upload');
             acceptedFiles.forEach((file) => {
