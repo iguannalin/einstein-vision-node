@@ -17,7 +17,8 @@ class App extends Component {
         uploadResponse: null,
         labels: {},
         scene: '',
-        count: 0
+        count: 0,
+        product: 'pegasus'
     }
 
     render() {
@@ -39,7 +40,10 @@ class App extends Component {
                     </div>
                 </div>
                 <div className="button">
-                    <button onClick={this.handleButtonClick}>Click me</button>
+                    <select name="product-choice" onChange={this.handleButtonClick}>
+                        <option value="react" selected>React FlyKnit</option>
+                        <option value="pegasus">Pegasus</option>
+                    </select>
                 </div>
                 <div className={classNames(
                     "app",
@@ -128,18 +132,19 @@ class App extends Component {
         // Import all images in image folder by Gabriel Esu
         function importAll(r) {
             let images = {};
-            r.keys().map((item, index) => {
+            r.keys().map((item) => {
                 images[item.replace('./', '')] = r(item);
             });
             return images;
         }
 
-        const shoeName = 'pegasus';
-        const folderName = '../public/images/' + shoeName;
+        let images;
 
-        const images = importAll(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg)$/));
-        console.log('IMAGES', images);
-
+        if (this.state.product === 'pegasus') {
+            images = importAll(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg)$/));
+        } else if (this.state.product === 'react') {
+            images = importAll(require.context('../public/images/react', false, /\.(gif|jpe?g|svg)$/));
+        }
 
         for (let key in images) {
             const url = images[key];
@@ -152,7 +157,10 @@ class App extends Component {
         }
     }
 
-    handleButtonClick = () => {
+    handleButtonClick = (e) => {
+        this.setState({
+            product: e.target.value
+        });
         this.getFiles();
     };
 
