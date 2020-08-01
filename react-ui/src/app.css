@@ -3,6 +3,7 @@
     border: 2px solid black;
     border-radius: 5px;
     padding: 24px;
+    box-shadow: 7px 7px black;
 }
 
 .title {
