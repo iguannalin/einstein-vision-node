@@ -32,8 +32,7 @@ class App extends Component {
             <div>
                 <div className="title">
                     <h1 className="intro">
-                        Einstein Vision Demo
-                        <div className="detail">of the General Image Classifier</div>
+                        Nike
                     </h1>
                     <div>
                         <p id="statement"></p>
@@ -45,65 +44,7 @@ class App extends Component {
                         <option value="pegasus">Pegasus</option>
                     </select>
                 </div>
-                <div className={classNames(
-                    "app",
-                    file != null ? "app-with-image" : null)}>
-                    {response || isProcessing ? null : <Dropzone
-                        accept={'image/png, image/jpeg'}
-                        multiple={true}
-                        onDrop={this.handleClick}
-                        style={{}}
-                        className={classNames(
-                            'dropzone', 'initial-dropzone',
-                            file != null ? 'dropzone-dropped' : null
-                        )}
-                        activeClassName="dropzone-active"
-                        rejectClassName="dropzone-reject">
-                        <UploadTarget/>
-                    </Dropzone>}
-
-
-                    <Dropzone
-                        accept={'image/png, image/jpeg'}
-                        multiple={false}
-                        onDrop={this.onDrop}
-                        style={{}}
-                        className={classNames(
-                            'dropzone',
-                            file != null ? 'dropzone-dropped' : null
-                        )}
-                        activeClassName="dropzone-active"
-                        rejectClassName="dropzone-reject">
-                        <div className="result-wrapper">
-                            <div className={classNames(
-                                'image-preview',
-                                file != null ? 'image-preview-visible' : null)}>
-
-                                {isProcessing || response ? <img
-                                    alt="Upload preview"
-                                    src={file && file.preview}
-                                    style={{display: 'block'}}/> : null}
-                                {!response || isProcessing ? null :
-                                    <div className="prompt">Drop or tap to upload another.</div>
-                                }
-                                <div className="spinner-wrapper">
-                                    {isProcessing
-                                        ? <span><Spinner/><div className="spinner-text">Analyzing Image...</div></span>
-                                        : null}
-                                    {uploadError
-                                        ? uploadError
-                                        : null}
-                                </div>
-                            </div>
-
-                            <Predictions contents={predictions}/>
-                        </div>
-                    </Dropzone>
-                </div>
-
                 <div className="footer">
-                    <a href="https://github.com/heroku/einstein-vision-node">GitHub</a>
-                    <a href="https://metamind.readme.io/v1/docs">API Docs</a>
                 </div>
             </div>
         );
