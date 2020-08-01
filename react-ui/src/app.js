@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import superagent from 'superagent';
-
 import './app.css';
 
 class App extends Component {
     state = {
         labels: {},
-        scene: '',
-        count: 0,
+        highestFrequency: {
+            label: '',
+            probability: 0
+        },
         product: 'pegasus'
     };
 
@@ -36,19 +37,24 @@ class App extends Component {
     getScene = () => {
         if (typeof this.state.labels === 'object') {
             for (let key in this.state.labels) {
-                if (this.state.labels[key] > this.state.count) {
+                if (this.state.labels[key] > this.state.highestFrequency.probability) {
                     this.setState({
                         scene: key,
                         count: this.state.labels[key]
                     });
                 }
-                document.getElementById('statement').innerHTML = '...is often seen at the ' + this.state.scene + '.';
+                document.getElementById('statement').innerHTML = '...is often seen at the ' + this.state.highestFrequency.label + '.';
             }
         }
     };
 
-    handleButtonClick = (e) => {
-        this.setState({
+    handleButtonClick = async (e) => {
+        await this.setState({
+            labels: {},
+            highestFrequency: {
+                label: '',
+                probability: 0
+            },
             product: e.target.value
         });
         this.getFiles();
@@ -86,16 +92,20 @@ class App extends Component {
 
     filterProbabilities = (res) => {
         let probabilities = JSON.parse(res.text).probabilities;
+        let tempLabels = this.state.labels;
+        let tempHighestFrequency = this.state.highestFrequency;
+
         probabilities.forEach(item => {
             if (item.probability > 0.5) {
-                const tempLabels = this.state.labels;
-                if (item.label in this.state.labels) {
-                    tempLabels[item.label] += 1;
+                if (tempLabels[item.label]) {
+                    tempLabels[item.label] += item.probability
                 } else {
-                    tempLabels[item.label] = 1;
+                    tempLabels[item.label] = item.probability;
                 }
+                tempHighestFrequency = (item.probability > this.state.highestFrequency.probability) ? item : this.state.highestFrequency;
                 this.setState({
-                    labels: tempLabels
+                    labels: tempLabels,
+                    highestFrequency: tempHighestFrequency
                 });
             }
         });
@@ -109,14 +119,14 @@ class App extends Component {
                 // Backend expects 'file' reference
                 req.attach('file', file, file.name);
             });
-            req.end((err, res) => {
+            req.end(async (err, res) => {
                 if (err) {
                     console.log('file-upload error', err);
                     this.setState({uploadError: err.message});
                     return err;
                 }
                 console.log('file-upload response', res);
-                this.filterProbabilities(res);
+                await this.filterProbabilities(res);
                 return res;
             });
         }
