@@ -38,9 +38,7 @@ class App extends Component {
     getScene = () => {
         if (typeof this.state.labels === 'object') {
             for (let key in this.state.labels) {
-                console.log('KEY ', key, this.state.labels[key]);
                 if (this.state.labels[key] > this.state.count) {
-                    console.log('THIS KEY', this.state.labels[key], this.state.count);
                     this.setState({
                         scene: key,
                         count: this.state.labels[key]
@@ -81,9 +79,7 @@ class App extends Component {
     fetchProbabilities(images) {
         for (let key in images) {
             const url = images[key];
-            console.log(key, url);
             fetch(url).then(data => data.blob()).then(res => {
-                console.log('meow', res);
                 let file = new File([res], key);
                 this.onDrop([file]);
             });
@@ -93,7 +89,6 @@ class App extends Component {
     filterProbabilities = (res) => {
         let probabilities = JSON.parse(res.text).probabilities;
         probabilities.forEach(item => {
-            console.log('ITEM', item);
             if (item.probability > 0.5) {
                 const tempLabels = this.state.labels;
                 if (item.label in this.state.labels) {
@@ -107,11 +102,9 @@ class App extends Component {
             }
         });
         this.getScene();
-        console.log('PROBS', probabilities, this.state.labels, 'scene', this.state.scene);
     };
 
     onDrop = (acceptedFiles) => {
-        console.log('WHAT ACCEPTED ', acceptedFiles);
         if (acceptedFiles.length) {
             let req = superagent.post('/file-upload');
             acceptedFiles.forEach((file) => {
@@ -120,11 +113,9 @@ class App extends Component {
             });
             req.end((err, res) => {
                 if (err) {
-                    console.log('file-upload error', err);
                     this.setState({uploadError: err.message});
                     return err;
                 }
-                console.log('file-upload response', res);
                 this.filterProbabilities(res);
                 return res;
             });
