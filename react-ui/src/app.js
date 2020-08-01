@@ -1,33 +1,17 @@
 import React, {Component} from 'react';
-import Dropzone from 'react-dropzone';
-import classNames from 'classnames';
 import superagent from 'superagent';
 
 import './app.css';
-import Spinner from './spinner';
-import Predictions from './predictions';
-import UploadTarget from './upload-target';
 
 class App extends Component {
-
     state = {
-        files: [],
-        isProcessing: false,
-        uploadError: null,
-        uploadResponse: null,
         labels: {},
         scene: '',
         count: 0,
         product: 'pegasus'
-    }
+    };
 
     render() {
-        const file = this.state.files[0];
-        const uploadError = this.state.uploadError;
-        const isProcessing = this.state.isProcessing;
-        const response = this.state.uploadResponse;
-        const predictions = (response && response.probabilities) || [];
-
         return (
             <div>
                 <div className="title">
@@ -40,7 +24,8 @@ class App extends Component {
                 </div>
                 <div className="button">
                     <select name="product-choice" onChange={this.handleButtonClick}>
-                        <option value="react" selected>React FlyKnit</option>
+                        <option value="default">Choose one</option>
+                        <option value="react">React FlyKnit</option>
                         <option value="pegasus">Pegasus</option>
                     </select>
                 </div>
@@ -51,11 +36,11 @@ class App extends Component {
     }
 
     getScene = () => {
-        if (this.state.labels.length > 0) {
-        }
         if (typeof this.state.labels === 'object') {
             for (let key in this.state.labels) {
+                console.log('KEY ', key, this.state.labels[key]);
                 if (this.state.labels[key] > this.state.count) {
+                    console.log('THIS KEY', this.state.labels[key], this.state.count);
                     this.setState({
                         scene: key,
                         count: this.state.labels[key]
@@ -66,33 +51,6 @@ class App extends Component {
         }
     };
 
-    getFiles = () => {
-        // Import all images in image folder by Gabriel Esu
-        function importAll(r) {
-            let images = {};
-            r.keys().map((item) => {
-                images[item.replace('./', '')] = r(item);
-            });
-            return images;
-        }
-
-        let images;
-
-        if (this.state.product === 'pegasus') {
-            images = importAll(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg)$/));
-        } else if (this.state.product === 'react') {
-            images = importAll(require.context('../public/images/react', false, /\.(gif|jpe?g|svg)$/));
-        }
-
-        for (let key in images) {
-            const url = images[key];
-            fetch(url).then(data => data.blob()).then(res => {
-                let file = new File([res], key);
-                this.handleClick([file]);
-            });
-        }
-    }
-
     handleButtonClick = (e) => {
         this.setState({
             product: e.target.value
@@ -100,51 +58,75 @@ class App extends Component {
         this.getFiles();
     };
 
-    handleClick = (acceptedFiles) => {
-        acceptedFiles.forEach(async (file) => {
-            const result = await this.onDrop([file]);
+    // Import all images in image folder by Gabriel Esu
+    importAllImages = (r) => {
+        let images = {};
+        r.keys().map((item) => {
+            images[item.replace('./', '')] = r(item);
         });
+        return images;
     };
 
-    onDrop = (acceptedFiles, rejectedFiles) => {
-        // acceptedFiles.map(file => Object.assign(file, {preview: URL.createObjectURL(file)}))
-        if (acceptedFiles.length) {
-            // this.setState({
-            //     isProcessing: true,
-            //     files: acceptedFiles,
-            //     uploadError: null,
-            //     uploadResponse: null
-            // });
+    getFiles = () => {
+        let images;
+        if (this.state.product === 'pegasus') {
+            images = this.importAllImages(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg)$/));
+        } else if (this.state.product === 'react') {
+            images = this.importAllImages(require.context('../public/images/react', false, /\.(gif|jpe?g|svg)$/));
+        }
 
-            var req = superagent.post('/file-upload');
+        this.fetchProbabilities(images);
+    };
+
+    fetchProbabilities(images) {
+        for (let key in images) {
+            const url = images[key];
+            console.log(key, url);
+            fetch(url).then(data => data.blob()).then(res => {
+                console.log('meow', res);
+                let file = new File([res], key);
+                this.onDrop([file]);
+            });
+        }
+    }
+
+    filterProbabilities = (res) => {
+        let probabilities = JSON.parse(res.text).probabilities;
+        probabilities.forEach(item => {
+            console.log('ITEM', item);
+            if (item.probability > 0.5) {
+                const tempLabels = this.state.labels;
+                if (item.label in this.state.labels) {
+                    tempLabels[item.label] += 1;
+                } else {
+                    tempLabels[item.label] = 1;
+                }
+                this.setState({
+                    labels: tempLabels
+                });
+            }
+        });
+        this.getScene();
+        console.log('PROBS', probabilities, this.state.labels, 'scene', this.state.scene);
+    };
+
+    onDrop = (acceptedFiles) => {
+        console.log('WHAT ACCEPTED ', acceptedFiles);
+        if (acceptedFiles.length) {
+            let req = superagent.post('/file-upload');
             acceptedFiles.forEach((file) => {
                 // Backend expects 'file' reference
                 req.attach('file', file, file.name);
             });
             req.end((err, res) => {
-                // this.setState({isProcessing: false});
                 if (err) {
+                    console.log('file-upload error', err);
                     this.setState({uploadError: err.message});
                     return err;
                 }
-                let probabilities = JSON.parse(res.text).probabilities;
-                probabilities.filter(item => item.probability > 0.5);
-                probabilities.forEach(item => {
-                    if (item.probability > 0.5) {
-                        const tempLabels = this.state.labels;
-                        if (item.label in this.state.labels) {
-                            tempLabels[item.label] += 1;
-                        } else {
-                            tempLabels[item.label] = 1;
-                        }
-                        this.setState({
-                            labels: tempLabels
-                        });
-                    }
-                });
-                this.getScene();
+                console.log('file-upload response', res);
+                this.filterProbabilities(res);
                 return res;
-                // this.setState({uploadResponse: JSON.parse(res.text)});
             });
         }
     }
