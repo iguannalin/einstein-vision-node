@@ -11,10 +11,10 @@ class App extends Component {
                 label: '',
                 probability: 0
             },
-            product: ''
+            product: window.location.href.split('/')[3],
+            productDisplayName: window.location.href.split('/')[3] === 'pegasus' ? 'Nike Air Zoom Pegasus 37' : 'Nike React Infinity Run Flyknit'
         };
         this.getScene = this.getScene.bind(this);
-        this.handleButtonClick = this.handleButtonClick.bind(this);
         this.importAllImages = this.importAllImages.bind(this);
         this.getFiles = this.getFiles.bind(this);
         this.fetchProbabilities = this.fetchProbabilities.bind(this);
@@ -27,7 +27,7 @@ class App extends Component {
             <div className="component-card">
                 <div className="title">
                     <h1 className="intro">
-                        Nike
+                        {this.state.productDisplayName}
                     </h1>
                     <span className="dropdown">
                         <select name="product-choice" onChange={this.handleButtonClick}>
@@ -44,6 +44,10 @@ class App extends Component {
         );
     }
 
+    componentDidMount() {
+        this.getFiles();
+    }
+
     getScene() {
         if (typeof this.state.labels === 'object') {
             for (let key in this.state.labels) {
@@ -56,18 +60,6 @@ class App extends Component {
                 document.getElementById('statement').innerHTML = '...is often seen at the ' + this.state.highestFrequency.label + '.';
             }
         }
-    };
-
-    async handleButtonClick(e) {
-        await this.setState({
-            labels: {},
-            highestFrequency: {
-                label: '',
-                probability: 0
-            },
-            product: e.target.value
-        });
-        this.getFiles();
     };
 
     // Import all images in image folder by Gabriel Esu
