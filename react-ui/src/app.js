@@ -29,14 +29,7 @@ class App extends Component {
                     <h1 className="intro">
                         {this.state.productDisplayName}
                     </h1>
-                    <span className="dropdown">
-                        <select name="product-choice" onChange={this.handleButtonClick}>
-                            <option value="default">Choose one</option>
-                            <option value="react">React FlyKnit</option>
-                            <option value="pegasus">Pegasus</option>
-                        </select>
-                    </span>
-                    <span className="prediction" id="statement"></span>
+                    <span className="prediction" id="statement"><span className="loading-dots">...</span></span>
                 </div>
                 <div className="footer">
                 </div>
