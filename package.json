@@ -7,6 +7,7 @@
   },
   "main": "index.js",
   "scripts": {
+    "start-dev": "(npm start --prefix react-ui & heroku run:local npm start --app evn-nike & open react-ui/public/nikepage.html)",
     "start": "node lib/run",
     "heroku-postbuild": "cd react-ui/ && npm install --only=dev && npm install && npm run build",
     "test": "ava"
