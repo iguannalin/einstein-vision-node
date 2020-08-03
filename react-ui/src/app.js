@@ -15,7 +15,7 @@ class App extends Component {
             },
             images: [],
             product: window.location.href.split('/')[3],
-            productDisplayName: window.location.href.split('/')[3] === 'pegasus' ? 'Nike Air Zoom Pegasus 37' : 'Nike React Infinity Run Flyknit'
+            productDisplayName: window.location.href.split('/')[3].includes('pegasus') ? 'Nike Air Zoom Pegasus 37' : 'Nike React Infinity Run Flyknit'
         };
         this.getScene = this.getScene.bind(this);
         this.importAllImages = this.importAllImages.bind(this);
@@ -58,7 +58,7 @@ class App extends Component {
     }
 
     componentDidMount() {
-        if (window.location.href.split('/')[3] !== 'pegasus' && window.location.href.split('/')[3] !== 'react') {
+        if (window.location.href.split('/')[3].includes('pegasus') && window.location.href.split('/')[3].includes('react')) {
             this.setState({
                 product: '00009042',
                 productDisplayName: 'Nike 00009042'
