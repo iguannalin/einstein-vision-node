@@ -14,7 +14,7 @@ class App extends Component {
                 probability: 0
             },
             images: [],
-            product: window.location.href.split('/')[3],
+            product: window.location.href.split('/')[3].includes('pegasus') ? 'Nike Air Zoom Pegasus 37' : 'Nike React Infinity Run Flyknit',
             productDisplayName: window.location.href.split('/')[3].includes('pegasus') ? 'Nike Air Zoom Pegasus 37' : 'Nike React Infinity Run Flyknit'
         };
         this.getScene = this.getScene.bind(this);
