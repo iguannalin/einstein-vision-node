@@ -32,7 +32,7 @@ class App extends Component {
                     <h1 className="intro">
                         {this.state.productDisplayName}
                     </h1>
-                    <span className="prediction" id="statement"><span className="loading-dots">...</span></span>
+                    <p className="prediction" id="statement"><span className="loading-dots">...</span></p>
                 </div>
                 <div className="footer">
                     <div className="carousel-container">
@@ -42,7 +42,7 @@ class App extends Component {
                                     <Carousel.Item>
                                         <img
                                             key={index}
-                                            className="d-block w-100"
+                                            className="d-block w-100 h-75"
                                             src={image.url}
                                             alt="Second slide"
                                         />
@@ -76,7 +76,7 @@ class App extends Component {
                         count: this.state.labels[key]
                     });
                 }
-                document.getElementById('statement').innerHTML = '...is often seen at the ' + this.state.highestFrequency.label + '.';
+                document.getElementById('statement').innerHTML = '...seems to be worn a lot at the ' + this.state.highestFrequency.label + '.';
             }
         }
     };
