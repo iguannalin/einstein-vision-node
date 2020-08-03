@@ -39,6 +39,12 @@ class App extends Component {
     }
 
     componentDidMount() {
+        if (window.location.href.split('/')[3] !== 'pegasus' && window.location.href.split('/')[3] !== 'react') {
+            this.setState({
+                product: '00009042',
+                productDisplayName: 'Nike 00009042'
+            });
+        }
         this.getFiles();
     }
 
@@ -71,6 +77,8 @@ class App extends Component {
             images = this.importAllImages(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg)$/));
         } else if (this.state.product === 'react') {
             images = this.importAllImages(require.context('../public/images/react', false, /\.(gif|jpe?g|svg)$/));
+        } else {
+            images = this.importAllImages(require.context('../public/images/00009042', false, /\.(gif|jpe?g|svg)$/));
         }
         this.setState({
             images: images
