@@ -30,7 +30,7 @@ class App extends Component {
             <div className="component-card">
                 <div className="title">
                     <h1 className="intro">
-                        {this.state.productDisplayName}
+                        {this.state.productDisplayName}:
                     </h1>
                     <p className="prediction" id="statement"><span className="loading-dots">...</span></p>
                 </div>
@@ -76,7 +76,7 @@ class App extends Component {
                         count: this.state.labels[key]
                     });
                 }
-                document.getElementById('statement').innerHTML = '...seems to be worn a lot at the ' + this.state.highestFrequency.label + '.';
+                document.getElementById('statement').innerHTML = 'Popular at the ' + this.state.highestFrequency.label;
             }
         }
     };
@@ -93,11 +93,11 @@ class App extends Component {
     getFiles() {
         let images;
         if (this.state.product === 'pegasus') {
-            images = this.importAllImages(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg)$/));
+            images = this.importAllImages(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg|png)$/));
         } else if (this.state.product === 'react') {
-            images = this.importAllImages(require.context('../public/images/react', false, /\.(gif|jpe?g|svg)$/));
+            images = this.importAllImages(require.context('../public/images/react', false, /\.(gif|jpe?g|svg|png)$/));
         } else {
-            images = this.importAllImages(require.context('../public/images/00009042', false, /\.(gif|jpe?g|svg)$/));
+            images = this.importAllImages(require.context('../public/images/00009042', false, /\.(gif|jpe?g|svg|png)$/));
         }
         this.setState({
             images: images
