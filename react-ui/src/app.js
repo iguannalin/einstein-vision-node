@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
+import Carousel from 'react-bootstrap/Carousel'
 import superagent from 'superagent';
 import './app.css';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
     constructor(props) {
@@ -33,6 +35,20 @@ class App extends Component {
                     <span className="prediction" id="statement"><span className="loading-dots">...</span></span>
                 </div>
                 <div className="footer">
+                    <Carousel>
+                        {this.state.images.map((image, index) => {
+                            return (
+                                <Carousel.Item>
+                                    <img
+                                        key={index}
+                                        className="d-block w-100"
+                                        src={image.url}
+                                        alt="Second slide"
+                                    />
+                                </Carousel.Item>
+                            )})
+                        }
+                    </Carousel>
                 </div>
             </div>
         );
