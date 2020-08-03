@@ -71,7 +71,6 @@ class App extends Component {
         if (typeof this.state.labels === 'object') {
             for (let key in this.state.labels) {
                 if (this.state.labels[key] > this.state.highestFrequency.probability) {
-                    console.log('this label ', this.state.labels[key], ' is greater ', this.state.highestFrequency.probability);
                     this.setState({
                         highestFrequency: {label: key, probability: this.state.labels[key]}
                     });
