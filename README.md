@@ -1,5 +1,6 @@
 # Check out app live:
 https://annaylin.com/evn-nike-demo/
+To see the Einstein Vision in play, click on the first product on the page, highlighted by a red box.
 
 # To run app locally:
 ```bash
