@@ -9,12 +9,9 @@
 }
 
 .title {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-flow: row wrap;
     font-style: italic;
     line-height: 1.7em;
+    min-height: 180px;
 }
 
 .intro {
@@ -48,6 +45,16 @@
     font-weight: 400;
     font-style: initial;
     line-break: anywhere;
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.carousel-container {
+    width: 300px;
 }
 
 .loading-dots {

@@ -35,20 +35,23 @@ class App extends Component {
                     <span className="prediction" id="statement"><span className="loading-dots">...</span></span>
                 </div>
                 <div className="footer">
-                    <Carousel>
-                        {this.state.images.map((image, index) => {
-                            return (
-                                <Carousel.Item>
-                                    <img
-                                        key={index}
-                                        className="d-block w-100"
-                                        src={image.url}
-                                        alt="Second slide"
-                                    />
-                                </Carousel.Item>
-                            )})
-                        }
-                    </Carousel>
+                    <div className="carousel-container">
+                        <Carousel indicators={false} controls={false} interval={200}>
+                            {this.state.images.map((image, index) => {
+                                return (
+                                    <Carousel.Item>
+                                        <img
+                                            key={index}
+                                            className="d-block w-100"
+                                            src={image.url}
+                                            alt="Second slide"
+                                        />
+                                    </Carousel.Item>
+                                )
+                            })
+                            }
+                        </Carousel>
+                    </div>
                 </div>
             </div>
         );
