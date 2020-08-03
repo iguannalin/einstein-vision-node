@@ -14,7 +14,7 @@ class App extends Component {
                 probability: 0
             },
             images: [],
-            product: window.location.href.split('/')[3].includes('pegasus') ? 'Nike Air Zoom Pegasus 37' : 'Nike React Infinity Run Flyknit',
+            product: window.location.href.split('/')[3],
             productDisplayName: window.location.href.split('/')[3].includes('pegasus') ? 'Nike Air Zoom Pegasus 37' : 'Nike React Infinity Run Flyknit'
         };
         this.getScene = this.getScene.bind(this);
@@ -92,9 +92,9 @@ class App extends Component {
 
     getFiles() {
         let images;
-        if (this.state.product === 'pegasus') {
+        if (this.state.product.includes('pegasus')) {
             images = this.importAllImages(require.context('../public/images/pegasus', false, /\.(gif|jpe?g|svg|png)$/));
-        } else if (this.state.product === 'react') {
+        } else if (this.state.product.includes('react')) {
             images = this.importAllImages(require.context('../public/images/react', false, /\.(gif|jpe?g|svg|png)$/));
         } else {
             images = this.importAllImages(require.context('../public/images/00009042', false, /\.(gif|jpe?g|svg|png)$/));
