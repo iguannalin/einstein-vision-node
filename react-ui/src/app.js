@@ -11,6 +11,7 @@ class App extends Component {
                 label: '',
                 probability: 0
             },
+            images: [],
             product: window.location.href.split('/')[3],
             productDisplayName: window.location.href.split('/')[3] === 'pegasus' ? 'Nike Air Zoom Pegasus 37' : 'Nike React Infinity Run Flyknit'
         };
@@ -57,9 +58,9 @@ class App extends Component {
 
     // Import all images in image folder by Gabriel Esu
     importAllImages(r) {
-        let images = {};
+        let images = [];
         r.keys().map((item) => {
-            return images[item.replace('./', '')] = r(item);
+            return images.push({name: item.replace('./', ''), url: r(item)});
         });
         return images;
     };
@@ -71,18 +72,19 @@ class App extends Component {
         } else if (this.state.product === 'react') {
             images = this.importAllImages(require.context('../public/images/react', false, /\.(gif|jpe?g|svg)$/));
         }
-
+        this.setState({
+            images: images
+        });
         this.fetchProbabilities(images);
     };
 
     fetchProbabilities(images) {
-        for (let key in images) {
-            const url = images[key];
-            fetch(url).then(data => data.blob()).then(res => {
-                let file = new File([res], key);
+        images.forEach(image => {
+            fetch(image.url).then(data => data.blob()).then(res => {
+                let file = new File([res], image.name);
                 this.onDrop([file]);
             });
-        }
+        })
     }
 
     filterProbabilities(res) {
