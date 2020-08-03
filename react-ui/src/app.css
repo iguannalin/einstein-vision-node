@@ -19,32 +19,10 @@
     margin-bottom: 6px;
 }
 
-.dropdown select {
-    border: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    -ms-appearance: none; /* get rid of default appearance for IE8, 9 and 10*/
-    display: inline-block;
-    margin-left: 8px;
-    font-size: 1.8em;
-    font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-    text-decoration: underline;
-    font-weight: 600;
-    font-style: italic;
-    cursor: pointer;
-    line-break: anywhere;
-}
-
-.dropdown:after {
-    content: "\25BC";
-}
-
 #statement {
     font-size: 2em;
     font-weight: 400;
     font-style: initial;
-    line-break: anywhere;
 }
 
 .footer {
