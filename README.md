@@ -1,3 +1,6 @@
+# Check out app live:
+https://annaylin.com/evn-nike-demo/
+
 # To run app locally:
 ```bash
 # Initial setup
