@@ -71,9 +71,9 @@ class App extends Component {
         if (typeof this.state.labels === 'object') {
             for (let key in this.state.labels) {
                 if (this.state.labels[key] > this.state.highestFrequency.probability) {
+                    console.log('this label ', this.state.labels[key], ' is greater ', this.state.highestFrequency.probability);
                     this.setState({
-                        scene: key,
-                        count: this.state.labels[key]
+                        highestFrequency: {label: key, probability: this.state.labels[key]}
                     });
                 }
                 document.getElementById('statement').innerHTML = 'Popular at the ' + this.state.highestFrequency.label;
